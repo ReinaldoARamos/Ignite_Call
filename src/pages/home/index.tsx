@@ -17,7 +17,7 @@ export default function Home() {
             </Text>
      
           </Heading>
-          <ClaimUserNameForm />
+                 <ClaimUserNameForm />
         </Hero>
         <Preview>
           <Image src={previewImage} height={400} alt="" quality={100} priority/>
