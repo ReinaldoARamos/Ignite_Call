@@ -6,7 +6,7 @@ import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const ClaimUserNameFormSchema = z.object({
-userName: z.string().min(3).regex(/^([a-z\\-]+)$/i),
+userName: z.string().min(3).regex(/^([a-z\\-]+)$/i).transform(username => username.toLowerCase()),
 
 })
 
