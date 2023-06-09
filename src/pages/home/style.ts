@@ -17,7 +17,7 @@ export const Hero = styled('div', {
     padding: '0 $10',
     
    [`${Heading}`]  : {
-    
+
    },
 
    [`${Text}`]  : {
@@ -29,4 +29,7 @@ export const Hero = styled('div', {
 
 export const Preview = styled('div', {
 
+'@media(max-width: 600px)' :{
+display: 'none'
+}
 })
