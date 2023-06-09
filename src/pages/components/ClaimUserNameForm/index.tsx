@@ -13,10 +13,10 @@ userName: z.string(),
 type ClaimUserNameFormData = z.infer<typeof ClaimUserNameFormSchema>
 
 export function ClaimUserNameForm() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<ClaimUserNameFormData>();
 
-  async function handleClaimUsername(data: any){
-    console.log(data)
+  async function handleClaimUsername(data: ClaimUserNameFormData){
+    console.log(data.userName)
   }
   return (
     <Form as="form" onSubmit={handleSubmit(handleClaimUsername)}>
@@ -24,7 +24,7 @@ export function ClaimUserNameForm() {
         size="sm"
         prefix="ignite.com/"
         placeholder="Seu-Usuário"
-        {...register("username")}
+        {...register("userName")}
       />
       <Button size="sm" type="submit">
         Reservar
