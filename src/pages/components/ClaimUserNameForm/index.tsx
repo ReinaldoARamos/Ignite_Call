@@ -24,6 +24,7 @@ export function ClaimUserNameForm() {
     console.log(data.userName);
   }
   return (
+    <>
     <Form as="form" onSubmit={handleSubmit(handleClaimUsername)}>
       <TextInput
         size="sm"
@@ -35,9 +36,11 @@ export function ClaimUserNameForm() {
         Reservar
         <ArrowRight />
       </Button>
-      <FormAnnotation>
-        <Text size='sm'>{errors.userName ? errors.userName?.message : 'Digite o nome do usuário '}</Text>
-      </FormAnnotation>
+    
     </Form>
+      <FormAnnotation>
+      <Text size='sm'>{errors.userName ? errors.userName?.message : 'Digite o nome do usuário '}</Text>
+    </FormAnnotation>
+    </>
   );
 }
