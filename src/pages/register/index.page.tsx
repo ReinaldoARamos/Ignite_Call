@@ -1,8 +1,10 @@
 import { Button, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
-import { Container, Form, Header } from "./styles";
+import { Container, Form, FormError, Header } from "./styles";
 import { ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 
 const registerFormSchema = z.object({
   userName: z
@@ -20,7 +22,9 @@ export default function Register() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterFormData>();
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerFormSchema)
+  });
 
   async function handleRegister(data: RegisterFormData) {
     console.log(data)
@@ -35,15 +39,21 @@ export default function Register() {
         </Text>
         <MultiStep size={4} currentStep={1}></MultiStep>
       </Header>
-      <Form as="form">
+      <Form as="form" onSubmit={handleSubmit(handleRegister)}>
         <label>
           <Text size="sm">Usuário</Text>
           <TextInput prefix="ignite.com/" placeholder="seu-usuário" {...register('userName')}/>
+          {errors.userName && (
+            <FormError size="sm">{errors.userName.message}</FormError>
+          )}
         </label>
 
         <label>
           <Text size="sm">Nome Completo</Text>
           <TextInput prefix="ignite.com/" placeholder="seu-nome"  {...register('name')}/>
+          {errors.name && (
+            <FormError size="sm">{errors.name.message}</FormError>
+          )}
         </label>
 
         <Button type="submit">
