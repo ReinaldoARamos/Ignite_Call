@@ -36,7 +36,7 @@ export default function Register() {
 
   useEffect(() => {
     if (router.query.username) {
-      setValue('username', router.query.username);
+      setValue('username', String(router.query.username));
     }
   }, [router.query?.username, setValue]);
 
