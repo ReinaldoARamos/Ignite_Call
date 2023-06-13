@@ -1,7 +1,7 @@
 import { Button, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
 
 import { ArrowRight } from "lucide-react";
-
+import {signIn} from 'next-auth/react'
 import { api } from "@/lib/axios";
 import { ConnectBox, ConnectItem, Container, Header } from "./styles";
 /*
@@ -39,7 +39,7 @@ export default function connectCalender() {
             <Text>
                 Google Calendar
             </Text>
-            <Button variant='secondary' size="sm">
+            <Button variant='secondary' size="sm" onClick={() => signIn('google')}>
           Conectar
           <ArrowRight />
         </Button>
