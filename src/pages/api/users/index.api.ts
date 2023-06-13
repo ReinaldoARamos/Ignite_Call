@@ -32,7 +32,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }    
     })
 
-    setCookie({res}, '@ignitecall:userId', user.id)
+    setCookie({res}, '@ignitecall:userId', user.id, {
+    
+    })
 
   return res.status(201).json(user);
 }
