@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { signIn } from "next-auth/react";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -17,5 +18,15 @@ export const authOptions: NextAuthOptions = {
     }),
     // ...add more providers here
   ],
+
+  callbacks: {
+    async signIn( { account} ) {
+      if (!account?.scope?.includes('https://www.googleapis.com/auth/calendar')){
+        return '/register/connect-calendar/?error=permissions'
+      }
+
+      return true
+    }
+  }
 };
 export default NextAuth(authOptions);
