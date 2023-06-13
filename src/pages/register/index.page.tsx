@@ -54,7 +54,7 @@ export default function Register() {
       
         return;
       }
-      console.error(err.response.data.message)
+      console.error(err)
     }
   }
   return (
