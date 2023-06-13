@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const {name, username} = req.body
 
-    const userExist = await prisma.user.findUnique({
+const userExist = await prisma.user.findUnique({
         where: {
             username,
         }
@@ -33,7 +33,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     setCookie({res}, '@ignitecall:userId', user.id, {
-    
+    maxAge: 60 * 60 * 24 * 7, //7 days to expire the cookie,
+    path: '/', //todas as rotas acessam os cookies
+        
     })
 
   return res.status(201).json(user);
