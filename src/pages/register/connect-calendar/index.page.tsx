@@ -1,7 +1,7 @@
 import { Button, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
 
 import { ArrowRight } from "lucide-react";
-import {signIn} from 'next-auth/react'
+import {signIn, useSession} from 'next-auth/react'
 import { api } from "@/lib/axios";
 import { ConnectBox, ConnectItem, Container, Header } from "./styles";
 /*
@@ -24,7 +24,12 @@ import { ConnectBox, ConnectItem, Container, Header } from "./styles";
   }
 * */
 
+
 export default function connectCalender() {
+
+  //const session = useSession()
+
+
   return (
     <Container>
       <Header>
@@ -44,6 +49,7 @@ export default function connectCalender() {
           <ArrowRight />
         </Button>
         </ConnectItem>
+       
         <Button >
           Próximo passo
           <ArrowRight />
