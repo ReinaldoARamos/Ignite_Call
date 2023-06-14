@@ -32,6 +32,10 @@ import { Checks } from "phosphor-react";
   }
 * */
 
+
+async function handleConnectCalendars() {
+ signIn("google")
+}
 export default function connectCalender() {
   const session = useSession();
   const router = useRouter();
@@ -58,7 +62,7 @@ export default function connectCalender() {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => signIn("google")}
+              onClick={handleConnectCalendars}
             >
               Conectar
               <ArrowRight />
