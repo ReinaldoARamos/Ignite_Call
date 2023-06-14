@@ -4,7 +4,10 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { signIn } from "next-auth/react";
 
-export function buildNextAuthOptions(): NextAuthOptions {
+export function buildNextAuthOptions(
+  req: NextApiRequest,
+  res: NextApiResponse
+): NextAuthOptions {
   return {
     // Configure one or more authentication providers
     adapter: PrismaAdapter(),
@@ -38,5 +41,5 @@ export function buildNextAuthOptions(): NextAuthOptions {
 }
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
-  return await NextAuth(req, res, buildNextAuthOptions());
+  return await NextAuth(req, res, buildNextAuthOptions(req, res));
 }
