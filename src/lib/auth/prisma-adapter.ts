@@ -1,7 +1,8 @@
 import { Adapter } from "next-auth/adapters";
 import { prisma } from "../prisma";
+import { NextApiRequest } from "next";
 
-export default function PrismaAdapter(): Adapter {
+export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse): Adapter {
   return {
     async createUser(user) {},
     async getUser(id) {
