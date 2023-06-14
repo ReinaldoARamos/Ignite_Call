@@ -3,7 +3,8 @@ import { Button, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
 import { ArrowRight } from "lucide-react";
 import {signIn, useSession} from 'next-auth/react'
 import { api } from "@/lib/axios";
-import { ConnectBox, ConnectItem, Container, Header } from "./styles";
+import { AuthError, ConnectBox, ConnectItem, Container, Header } from "./styles";
+import { useRouter } from "next/router";
 /*
 
 
@@ -27,7 +28,10 @@ import { ConnectBox, ConnectItem, Container, Header } from "./styles";
 
 export default function connectCalender() {
 
-  //const session = useSession()
+  const session = useSession()
+  const router = useRouter()
+
+  const hasAuthError = !!router.query.error
 
 
   return (
@@ -49,7 +53,11 @@ export default function connectCalender() {
           <ArrowRight />
         </Button>
         </ConnectItem>
-       
+       {hasAuthError && (
+        <AuthError size='sm'>
+            Falha ao se conectar ao Google, verifique se você habilitou as opções de acesso ao Google Calander
+        </AuthError>
+       )}
         <Button >
           Próximo passo
           <ArrowRight />
