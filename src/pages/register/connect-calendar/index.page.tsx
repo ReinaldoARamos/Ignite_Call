@@ -32,9 +32,8 @@ import { Checks } from "phosphor-react";
   }
 * */
 
-
 async function handleConnectCalendars() {
- signIn("google")
+  signIn("google");
 }
 export default function connectCalender() {
   const session = useSession();
@@ -54,7 +53,7 @@ export default function connectCalender() {
         <ConnectItem>
           <Text>Google Calendar</Text>
           {isSignedIn ? (
-            <Button size='sm' disabled >
+            <Button size="sm" disabled>
               Conectado
               <Checks />
             </Button>
