@@ -71,7 +71,7 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
       };
     },
     async getUserByAccount({ providerAccountId, provider }) {
-      const {user} = await prisma.account.findUniqueOrThrow({
+      const account = await prisma.account.findUnique({
         where: {
         provider_provider_account_id: {
           provider,
@@ -84,6 +84,13 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
        
         
       })
+        
+      if(!account) {
+        return null
+      }
+
+      const {user} = account
+      
       return {
         id: user?.id,
         name: user.name,
