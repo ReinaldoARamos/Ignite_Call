@@ -1,33 +1,34 @@
 import { Adapter } from "next-auth/adapters";
 import { prisma } from "../prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import {parseCookies, destroyCookie} from 'nookies'
+import { parseCookies, destroyCookie } from "nookies";
 
-export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse): Adapter {
+export default function PrismaAdapter(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Adapter {
   return {
-
-    
     async createUser(user) {
-      const {'@ignitecall:userId' : userIdOnCookies} = parseCookies({req})
+      const { "@ignitecall:userId": userIdOnCookies } = parseCookies({ req });
 
-      if(!userIdOnCookies){
-        throw new Error('user ID not found on cookies')
+      if (!userIdOnCookies) {
+        throw new Error("user ID not found on cookies");
       }
 
       const prismaUser = await prisma.user.update({
         where: {
-          id: userIdOnCookies
+          id: userIdOnCookies,
         },
         data: {
           name: user.name,
           email: user.email,
-          avatar_url: user.avatar_url
-        }
-      })
+          avatar_url: user.avatar_url,
+        },
+      });
 
-      destroyCookie({res}, '@ignitecall:userId', {
-        path: '/',
-      })
+      destroyCookie({ res }, "@ignitecall:userId", {
+        path: "/",
+      });
 
       return {
         id: prismaUser?.id,
@@ -45,9 +46,8 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
         },
       });
 
-
-      if(!user) {
-        return null
+      if (!user) {
+        return null;
       }
 
       return {
@@ -66,9 +66,8 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
         },
       });
 
-
-      if(!user) {
-        return null
+      if (!user) {
+        return null;
       }
       return {
         id: user?.id,
@@ -82,23 +81,21 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
     async getUserByAccount({ providerAccountId, provider }) {
       const account = await prisma.account.findUnique({
         where: {
-        provider_provider_account_id: {
-          provider,
-          provider_account_id: providerAccountId
-        },
+          provider_provider_account_id: {
+            provider,
+            provider_account_id: providerAccountId,
+          },
         },
         include: {
-          user: true
-        }
-       
-        
-      })
-        
-      if(!account) {
-        return null
+          user: true,
+        },
+      });
+
+      if (!account) {
+        return null;
       }
 
-      const {user} = account
+      const { user } = account;
 
       return {
         id: user?.id,
@@ -108,20 +105,18 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
         username: user?.username,
         emailVerified: null,
       };
-      
     },
     async updateUser(user) {
       const prismaUser = await prisma.user.update({
         where: {
-          id: user.id
+          id: user.id,
         },
         data: {
           name: user.name,
           email: user.email,
-          avatar_url: user.avatar_url
-        }
-        
-      })
+          avatar_url: user.avatar_url,
+        },
+      });
       return {
         id: prismaUser?.id,
         name: prismaUser.name,
@@ -129,8 +124,7 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
         email: prismaUser.email!,
         username: prismaUser?.username,
         emailVerified: null,
-      }
-      
+      };
     },
 
     async linkAccount(account) {
@@ -146,9 +140,9 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
           scope: account.scope,
           id_token: account.id_token,
           session_state: account.session_state,
-          provider_account_id: account.providerAccountId
-        }
-      })
+          provider_account_id: account.providerAccountId,
+        },
+      });
     },
     async unlinkAccount({ providerAccountId, provider }) {},
     async createSession({ sessionToken, userId, expires }) {
@@ -157,32 +151,30 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
           user_id: userId,
           expires,
           session_token: sessionToken,
+        },
+      });
 
-
-        }
-      })
-
-      return{ 
-        userId, 
+      return {
+        userId,
         sessionToken,
-        expires
-      }
+        expires,
+      };
     },
     async getSessionAndUser(sessionToken) {
-      const  prismaSession = await prisma.session.findUnique({
+      const prismaSession = await prisma.session.findUnique({
         where: {
-          session_token : sessionToken
+          session_token: sessionToken,
         },
         include: {
-          user: true
-        }
-      })
-      
-      if(!prismaSession) {
-        return null
+          user: true,
+        },
+      });
+
+      if (!prismaSession) {
+        return null;
       }
 
-      const { user, ...session} = prismaSession
+      const { user, ...session } = prismaSession;
       return {
         session: {
           expires: session.expires,
@@ -196,40 +188,33 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
           email: user.email!,
           username: user?.username,
           emailVerified: null,
-        }
-      }
+        },
+      };
     },
-       
+
     async updateSession({ sessionToken, userId, expires }) {
       const PrismaSession = await prisma.session.update({
         where: {
-      session_token: sessionToken,
+          session_token: sessionToken,
         },
         data: {
-        expires: expires,
-        user_id: userId,
-        }
-        
-      })
+          expires: expires,
+          user_id: userId,
+        },
+      });
       return {
-      sessionToken : PrismaSession.session_token,
-      userId: PrismaSession.user_id,
-      expires : PrismaSession.expires
-      }
+        sessionToken: PrismaSession.session_token,
+        userId: PrismaSession.user_id,
+        expires: PrismaSession.expires,
+      };
     },
 
- 
-
-    async  deleteSession(sessionToken ) {
+    async deleteSession(sessionToken) {
       await prisma.session.delete({
         where: {
-          session_token: sessionToken
-        }
-      })
-  
-      
+          session_token: sessionToken,
+        },
+      });
     },
-
+  };
 }
-}
-
