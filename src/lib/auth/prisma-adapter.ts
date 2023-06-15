@@ -60,7 +60,7 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
       };
     },
     async getUserByEmail(email) {
-      const user = await prisma.user.findUniqueOrThrow({
+      const user = await prisma.user.findUnique({
         where: {
           email,
         },
