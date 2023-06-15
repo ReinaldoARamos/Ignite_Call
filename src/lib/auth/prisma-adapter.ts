@@ -1,10 +1,12 @@
 import { Adapter } from "next-auth/adapters";
 import { prisma } from "../prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import {parseCookies} from 'nookies'
+import {parseCookies, destroyCookie} from 'nookies'
 
 export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse): Adapter {
   return {
+
+    
     async createUser(user) {
       const {'@ignitecall:userId' : userIdOnCookies} = parseCookies({req})
 
@@ -22,6 +24,19 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
           avatar_url: user.avatar_url
         }
       })
+
+      destroyCookie({res}, '@ignitecall:userId', {
+        path: '/',
+      })
+
+      return {
+        id: prismaUser?.id,
+        name: prismaUser.name,
+        avatar_url: prismaUser?.avatar_url!,
+        email: prismaUser.email!,
+        username: prismaUser?.username,
+        emailVerified: null,
+      };
     },
     async getUser(id) {
       const user = await prisma.user.findUniqueOrThrow({
@@ -146,6 +161,7 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
           user: true
         }
       })
+      
 
       return {
         session: {
@@ -163,6 +179,7 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
         }
       }
     },
+       
     async updateSession({ sessionToken, userId, expires }) {
       const PrismaSession = await prisma.session.update({
         where: {
@@ -180,5 +197,19 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
       expires : PrismaSession.expires
       }
     },
-  };
+
+ 
+
+    async  deleteSession(sessionToken ) {
+      await prisma.session.delete({
+        where: {
+          session_token: sessionToken
+        }
+      })
+  
+      
+    },
+
 }
+}
+
