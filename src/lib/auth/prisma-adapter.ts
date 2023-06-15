@@ -39,11 +39,16 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
       };
     },
     async getUser(id) {
-      const user = await prisma.user.findUniqueOrThrow({
+      const user = await prisma.user.findUnique({
         where: {
           id,
         },
       });
+
+
+      if(!user) {
+        return null
+      }
 
       return {
         id: user?.id,
@@ -61,6 +66,10 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
         },
       });
 
+
+      if(!user) {
+        return null
+      }
       return {
         id: user?.id,
         name: user.name,
@@ -90,7 +99,7 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
       }
 
       const {user} = account
-      
+
       return {
         id: user?.id,
         name: user.name,
@@ -160,7 +169,7 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
       }
     },
     async getSessionAndUser(sessionToken) {
-      const { user, ...session} = await prisma.session.findUniqueOrThrow({
+      const  prismaSession = await prisma.session.findUnique({
         where: {
           session_token : sessionToken
         },
@@ -169,7 +178,11 @@ export default function PrismaAdapter(req: NextApiRequest, res: NextApiResponse)
         }
       })
       
+      if(!prismaSession) {
+        return null
+      }
 
+      const { user, ...session} = prismaSession
       return {
         session: {
           expires: session.expires,
