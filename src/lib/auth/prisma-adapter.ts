@@ -79,7 +79,7 @@ export default function PrismaAdapter(
       };
     },
     async getUserByAccount({ providerAccountId, provider }) {
-      const account = await prisma.account.findUnique({
+      const account = await prisma.accounts.findUnique({
         where: {
           provider_provider_account_id: {
             provider,
@@ -128,7 +128,7 @@ export default function PrismaAdapter(
     },
 
     async linkAccount(account) {
-      await prisma.account.create({
+      await prisma.accounts.create({
         data: {
           user_id: account.userId,
           type: account.type,
