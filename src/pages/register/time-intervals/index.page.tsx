@@ -93,16 +93,16 @@ export default function connectCalender() {
 
       <IntervalBox as="form" onSubmit={handleSubmit(handleSetTimeIntervals)}>
         <IntervalContainer>
-        {fields.map((field) => {
-            return (
+        {fields.map((field, index) => {
+            return (    
                 <IntervalItem key={field.id}>
                 <IntervalDay>
                   <Checkbox />
                   <Text> {weekDays[field.weekday]} </Text>
                 </IntervalDay>
                 <IntervalInputs>
-                  <TextInput size="sm" type="time" step={60} />
-                  <TextInput size="sm" type="time" step={60} />
+                  <TextInput size="sm" type="time" step={60} {...register(`intervals.${index}.startTime`)} />
+                  <TextInput size="sm" type="time" step={60} {...register(`intervals.${index}.endTime`)} />
                 </IntervalInputs>
               </IntervalItem>
     
