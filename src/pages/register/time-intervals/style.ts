@@ -6,7 +6,7 @@ export const IntervalBox = styled(Box, {
   flexDirection: " column",
 });
 
-export const intervalContainer = styled("div", {
+export const IntervalContainer = styled("div", {
   border: "1px solid $gray600",
   borderRadius: "$md",
   marginBottom: "",
