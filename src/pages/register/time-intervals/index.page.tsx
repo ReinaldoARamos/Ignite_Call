@@ -15,21 +15,67 @@ import {
   IntervalItem,
 } from "./style";
 import { ArrowRight, Check } from "phosphor-react";
-import { useForm } from "react-hook-form";
-import z from 'zod';
+import { useFieldArray, useForm } from "react-hook-form";
+import z from "zod";
 
-const TimeIntervalsFormSchema = z.object({
-    
-})
+const TimeIntervalsFormSchema = z.object({});
 export default function connectCalender() {
-    const { register, handleSubmit, formState: {
-        isSubmitting,
-        errors
-    }} = useForm()
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm({
+    defaultValues: {
+      intervals: [
+        {
+          weekday: 0,
+          enabled: false,
+          startTime: "08:00",
+          endTime: "18:00",
+        },
+        {
+          weekday: 1,
+          enabled: true,
+          startTime: "08:00",
+          endTime: "18:00",
+        },
+        {
+          weekday: 2,
+          enabled: true,
+          startTime: "08:00",
+          endTime: "18:00",
+        },
+        {
+          weekday: 3,
+          enabled: true,
+          startTime: "08:00",
+          endTime: "18:00",
+        },
+        {
+          weekday: 4,
+          enabled: true,
+          startTime: "08:00",
+          endTime: "18:00",
+        },
+        {
+          weekday: 5,
+          enabled: true,
+          startTime: "08:00",
+          endTime: "18:00",
+        },
+        {
+          weekday: 6,
+          enabled: false,
+          startTime: "08:00",
+          endTime: "18:00",
+        },
+      ],
+    },
+  });
 
-async function handleSetTimeIntervals() {
-    
-}
+  const { } = useFieldArray()
+
+  async function handleSetTimeIntervals() {}
   return (
     <Container>
       <Header>
