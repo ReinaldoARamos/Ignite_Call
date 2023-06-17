@@ -23,6 +23,7 @@ export default function connectCalender() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
@@ -73,7 +74,10 @@ export default function connectCalender() {
     },
   });
 
-  const { } = useFieldArray()
+  const { fields} = useFieldArray({
+    name: 'intervals',
+    control,
+  })
 
   async function handleSetTimeIntervals() {}
   return (
@@ -86,27 +90,22 @@ export default function connectCalender() {
 
       <IntervalBox as="form" onSubmit={handleSubmit(handleSetTimeIntervals)}>
         <IntervalContainer>
-          <IntervalItem>
-            <IntervalDay>
-              <Checkbox />
-              <Text>Segunda-feira</Text>
-            </IntervalDay>
-            <IntervalInputs>
-              <TextInput size="sm" type="time" step={60} />
-              <TextInput size="sm" type="time" step={60} />
-            </IntervalInputs>
-          </IntervalItem>
-
-          <IntervalItem>
-            <IntervalDay>
-              <Checkbox />
-              <Text>Terça-feira</Text>
-            </IntervalDay>
-            <IntervalInputs>
-              <TextInput size="sm" type="time" step={60} />
-              <TextInput size="sm" type="time" step={60} />
-            </IntervalInputs>
-          </IntervalItem>
+        {fields.map((field) => {
+            return (
+                <IntervalItem key={field.id}>
+                <IntervalDay>
+                  <Checkbox />
+                  <Text>{field.weekday} </Text>
+                </IntervalDay>
+                <IntervalInputs>
+                  <TextInput size="sm" type="time" step={60} />
+                  <TextInput size="sm" type="time" step={60} />
+                </IntervalInputs>
+              </IntervalItem>
+    
+            
+            )
+        })}
         </IntervalContainer>
         <Button type="submit">
           Próximo passo <ArrowRight />
