@@ -1,4 +1,4 @@
-import { Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
+import { Checkbox, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
 import { Container, Header } from "../styles";
 import {
   IntervalBox,
@@ -22,7 +22,7 @@ export default function connectCalender() {
         <IntervalContainer>
           <IntervalItem>
             <IntervalDay>
-                <Check  />  
+                <Checkbox  />  
                 <Text>
                     Segunda-feira
                 </Text>
@@ -30,7 +30,28 @@ export default function connectCalender() {
             <IntervalInputs>
               <TextInput size="sm" type="time" step={60}/>
               <TextInput size="sm" type="time" step={60}/>
+              
             </IntervalInputs>
+            
+
+            
+          </IntervalItem>
+
+          <IntervalItem>
+            <IntervalDay>
+            <Checkbox  />  
+                <Text>
+                    Terça-feira
+                </Text>
+            </IntervalDay>
+            <IntervalInputs>
+              <TextInput size="sm" type="time" step={60}/>
+              <TextInput size="sm" type="time" step={60}/>
+              
+            </IntervalInputs>
+            
+
+            
           </IntervalItem>
         </IntervalContainer>
       </IntervalBox>
