@@ -17,6 +17,7 @@ import {
 import { ArrowRight, Check } from "phosphor-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import z from "zod";
+import { getWeekDays } from "@/utils/get-weekdays";
 
 const TimeIntervalsFormSchema = z.object({});
 export default function connectCalender() {
@@ -74,6 +75,8 @@ export default function connectCalender() {
     },
   });
 
+  const weekDays = getWeekDays()
+
   const { fields} = useFieldArray({
     name: 'intervals',
     control,
@@ -95,7 +98,7 @@ export default function connectCalender() {
                 <IntervalItem key={field.id}>
                 <IntervalDay>
                   <Checkbox />
-                  <Text>{field.weekday} </Text>
+                  <Text> {weekDays[field.weekday]} </Text>
                 </IntervalDay>
                 <IntervalInputs>
                   <TextInput size="sm" type="time" step={60} />
