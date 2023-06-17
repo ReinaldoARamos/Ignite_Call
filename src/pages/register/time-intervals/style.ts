@@ -32,5 +32,9 @@ export const  IntervalDay = styled("div", {
 export const  IntervalInputs = styled("div", {
     display: "flex",
     alignItems: "center",
-    gap: '$2'
+    gap: '$2',
+
+    'input:: -webkit-calendar-picker-indicator' : {
+        filter: 'invert(100%) brightness(30%) saturate(0%) '
+    }
 } )

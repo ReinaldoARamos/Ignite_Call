@@ -1,4 +1,4 @@
-import { Checkbox, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
+import { Button, Checkbox, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
 import { Container, Header } from "../styles";
 import {
   IntervalBox,
@@ -7,7 +7,7 @@ import {
   IntervalInputs,
   IntervalItem,
 } from "./style";
-import { Check } from "phosphor-react";
+import { ArrowRight, Check } from "phosphor-react";
 
 export default function connectCalender() {
   return (
@@ -54,6 +54,7 @@ export default function connectCalender() {
             
           </IntervalItem>
         </IntervalContainer>
+        <Button type="submit">Próximo passo <ArrowRight /></Button>
       </IntervalBox>
     </Container>
   );
