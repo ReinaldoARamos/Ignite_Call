@@ -20,6 +20,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import z from "zod";
 import { getWeekDays } from "@/utils/get-weekdays";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { convertTimeStringToMinutes } from "@/utils/convert-time-string-to-minutes";
 
 const TimeIntervalsFormSchema = z.object({
   intervals: z
@@ -35,7 +36,16 @@ const TimeIntervalsFormSchema = z.object({
     .transform((intervals) =>
       intervals.filter((interval) => interval.enabled)
     )
-    .refine((intervals) => intervals.length > 0, {message: "Intervals"}),
+    .refine((intervals) => intervals.length > 0, {message: "Intervals"})
+    .transform(intervals => {
+      return intervals.map(interval => {
+        return {
+          weelDay: interval.weekday,
+          startTimeInMinutes: convertTimeStringToMinutes(interval.startTime),
+          endTimeInMinutes: convertTimeStringToMinutes(interval.endTime)
+        }
+      })
+    }),
 });
 
 type TimeIntervalsFormData = z.infer<typeof TimeIntervalsFormSchema>;
