@@ -15,7 +15,7 @@ import {
   IntervalItem,
 } from "./style";
 import { ArrowRight, Check } from "phosphor-react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import z from "zod";
 import { getWeekDays } from "@/utils/get-weekdays";
 
@@ -75,12 +75,12 @@ export default function connectCalender() {
     },
   });
 
-  const weekDays = getWeekDays()
+  const weekDays = getWeekDays();
 
-  const { fields} = useFieldArray({
-    name: 'intervals',
+  const { fields } = useFieldArray({
+    name: "intervals",
     control,
-  })
+  });
 
   async function handleSetTimeIntervals() {}
   return (
@@ -93,22 +93,41 @@ export default function connectCalender() {
 
       <IntervalBox as="form" onSubmit={handleSubmit(handleSetTimeIntervals)}>
         <IntervalContainer>
-        {fields.map((field, index) => {
-            return (    
-                <IntervalItem key={field.id}>
+          {fields.map((field, index) => {
+            return (
+              <IntervalItem key={field.id}>
                 <IntervalDay>
-                  <Checkbox />
-                  <Text> {weekDays[field.weekday]} </Text>
+                  <Controller
+                    name={`intervals.${index}.enabled`}
+                    control={control}
+                    render={({ field }) => {
+                      return <Checkbox 
+                      onCheckedChange={checked => {
+                        field.onChange(checked == true)
+                      }}
+                      checked={field.value}
+                      />;
+                    }}
+                  />
+                  <Text>{weekDays[field.weekday]} </Text>
                 </IntervalDay>
                 <IntervalInputs>
-                  <TextInput size="sm" type="time" step={60} {...register(`intervals.${index}.startTime`)} />
-                  <TextInput size="sm" type="time" step={60} {...register(`intervals.${index}.endTime`)} />
+                  <TextInput
+                    size="sm"
+                    type="time"
+                    step={60}
+                    {...register(`intervals.${index}.startTime`)}
+                  />
+                  <TextInput
+                    size="sm"
+                    type="time"
+                    step={60}
+                    {...register(`intervals.${index}.endTime`)}
+                  />
                 </IntervalInputs>
               </IntervalItem>
-    
-            
-            )
-        })}
+            );
+          })}
         </IntervalContainer>
         <Button type="submit">
           Próximo passo <ArrowRight />
