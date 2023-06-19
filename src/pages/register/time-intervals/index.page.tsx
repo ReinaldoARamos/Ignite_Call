@@ -19,7 +19,18 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import z from "zod";
 import { getWeekDays } from "@/utils/get-weekdays";
 
-const TimeIntervalsFormSchema = z.object({});
+const TimeIntervalsFormSchema = z.object({
+  intervals: z.array(z.object({
+    weekDay: z.number().min(0).max(6),
+    enabled: z.boolean(),
+    startTime: z.string(),
+    endTime: z.string(),
+
+  })).length(7)
+});
+
+type TimeIntervalsFormData = z.infer<typeof TimeIntervalsFormSchema>;
+
 export default function connectCalender() {
   const {
     register,
@@ -76,7 +87,7 @@ export default function connectCalender() {
     },
   });
 
-  const intervals = watch('intervals') //retorna em tempo real alteração de valores
+  const intervals = watch("intervals"); //retorna em tempo real alteração de valores
   const weekDays = getWeekDays();
 
   const { fields } = useFieldArray({
@@ -84,7 +95,9 @@ export default function connectCalender() {
     control,
   });
 
-  async function handleSetTimeIntervals() {}
+  async function handleSetTimeIntervals(data: TimeIntervalsFormData) {
+    console.log(data)
+  }
   return (
     <Container>
       <Header>
@@ -103,26 +116,28 @@ export default function connectCalender() {
                     name={`intervals.${index}.enabled`}
                     control={control}
                     render={({ field }) => {
-                      return <Checkbox 
-                      onCheckedChange={checked => {
-                        field.onChange(checked == true)
-                      }}
-                      checked={field.value}
-                      />;
+                      return (
+                        <Checkbox
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked == true);
+                          }}
+                          checked={field.value}
+                        />
+                      );
                     }}
                   />
                   <Text>{weekDays[field.weekday]} </Text>
                 </IntervalDay>
                 <IntervalInputs>
                   <TextInput
-                  disabled={intervals[index].enabled === false}
+                    disabled={intervals[index].enabled === false}
                     size="sm"
                     type="time"
                     step={60}
                     {...register(`intervals.${index}.startTime`)}
                   />
                   <TextInput
-                     disabled={intervals[index].enabled === false}
+                    disabled={intervals[index].enabled === false}
                     size="sm"
                     type="time"
                     step={60}
