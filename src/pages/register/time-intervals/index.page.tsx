@@ -25,6 +25,7 @@ export default function connectCalender() {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
@@ -75,6 +76,7 @@ export default function connectCalender() {
     },
   });
 
+  const intervals = watch('intervals') //retorna em tempo real alteração de valores
   const weekDays = getWeekDays();
 
   const { fields } = useFieldArray({
@@ -113,12 +115,14 @@ export default function connectCalender() {
                 </IntervalDay>
                 <IntervalInputs>
                   <TextInput
+                  disabled={intervals[index].enabled === false}
                     size="sm"
                     type="time"
                     step={60}
                     {...register(`intervals.${index}.startTime`)}
                   />
                   <TextInput
+                     disabled={intervals[index].enabled === false}
                     size="sm"
                     type="time"
                     step={60}
