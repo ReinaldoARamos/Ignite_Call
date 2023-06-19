@@ -7,6 +7,7 @@ import {
   TextInput,
 } from "@ignite-ui/react";
 import { Container, Header } from "../styles";
+import {FormError} from './style'
 import {
   IntervalBox,
   IntervalContainer,
@@ -157,7 +158,12 @@ export default function connectCalender() {
             );
           })}
         </IntervalContainer>
-        <Button type="submit">
+        {errors.intervals && (
+          <FormError size='sm'>
+            {errors.intervals.message}
+          </FormError>
+        )}
+        <Button type="submit" disabled={isSubmitting}>
           Próximo passo <ArrowRight />
         </Button>
       </IntervalBox>
