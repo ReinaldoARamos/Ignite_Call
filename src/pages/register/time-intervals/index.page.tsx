@@ -51,7 +51,8 @@ const TimeIntervalsFormSchema = z.object({
     }, {message: 'horario de termino deve ser pelo menos uma hora de distancia do de início'}),
 });
 
-type TimeIntervalsFormData = z.infer<typeof TimeIntervalsFormSchema>;
+type TimeIntervalsFormInput = z.input<typeof TimeIntervalsFormSchema>;
+type TimeIntervalsFormOutput = z.output<typeof TimeIntervalsFormSchema>;
 
 export default function connectCalender() {
   const {
@@ -60,7 +61,7 @@ export default function connectCalender() {
     control,
     watch,
     formState: { isSubmitting, errors },
-  } = useForm({
+  } = useForm<TimeIntervalsFormInput>({
     resolver: zodResolver(TimeIntervalsFormSchema),
     defaultValues: {
       intervals: [
@@ -118,7 +119,7 @@ export default function connectCalender() {
     control,
   });
 
-  async function handleSetTimeIntervals(data: TimeIntervalsFormData) {
+  async function handleSetTimeIntervals(data: TimeIntervalsFormOutput) {
     console.log(data);
   }
   return (
