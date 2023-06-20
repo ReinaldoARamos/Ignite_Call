@@ -12,6 +12,7 @@ import {
 } from "@ignite-ui/react";
 import { ArrowRight } from "phosphor-react";
 import { FormAnnotation, ProfileBox } from "./styles";
+import { useSession } from "next-auth/react";
 
 const UpdateProfileSchema = z.object({
   bio: z.string(),
@@ -27,6 +28,10 @@ export default function UpdateProfile() {
   } = useForm<UpdateProfileData>({
     resolver: zodResolver(UpdateProfileSchema),
   });
+
+  const session = useSession()
+
+  console.log(session)
 
   async function handleUpdate(data: UpdateProfileData) {}
 
