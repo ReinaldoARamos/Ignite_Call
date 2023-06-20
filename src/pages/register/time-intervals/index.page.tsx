@@ -39,7 +39,7 @@ const TimeIntervalsFormSchema = z.object({
     .transform((intervals) => {
       return intervals.map((interval) => {
         return {
-          weelDay: interval.weekday,
+          weekDay: interval.weekday,
           startTimeInMinutes: convertTimeStringToMinutes(interval.startTime),
           endTimeInMinutes: convertTimeStringToMinutes(interval.endTime),
         };
