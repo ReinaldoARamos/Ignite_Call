@@ -7,7 +7,7 @@ import {
   TextInput,
 } from "@ignite-ui/react";
 import { Container, Header } from "../styles";
-import {FormError} from './style'
+import { FormError } from "./style";
 import {
   IntervalBox,
   IntervalContainer,
@@ -21,6 +21,7 @@ import z from "zod";
 import { getWeekDays } from "@/utils/get-weekdays";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { convertTimeStringToMinutes } from "@/utils/convert-time-string-to-minutes";
+import { api } from "@/lib/axios";
 
 const TimeIntervalsFormSchema = z.object({
   intervals: z
@@ -33,22 +34,29 @@ const TimeIntervalsFormSchema = z.object({
       })
     )
     .length(7)
-    .transform((intervals) =>
-      intervals.filter((interval) => interval.enabled)
-    )
-    .refine((intervals) => intervals.length > 0, {message: "Intervals"})
-    .transform(intervals => {
-      return intervals.map(interval => {
+    .transform((intervals) => intervals.filter((interval) => interval.enabled))
+    .refine((intervals) => intervals.length > 0, { message: "Intervals" })
+    .transform((intervals) => {
+      return intervals.map((interval) => {
         return {
           weelDay: interval.weekday,
           startTimeInMinutes: convertTimeStringToMinutes(interval.startTime),
-          endTimeInMinutes: convertTimeStringToMinutes(interval.endTime)
-        }
-      })
+          endTimeInMinutes: convertTimeStringToMinutes(interval.endTime),
+        };
+      });
     })
-    .refine(intervals => {
-      return intervals.every(interval => interval.endTimeInMinutes - 60 >= interval.startTimeInMinutes)
-    }, {message: 'horario de termino deve ser pelo menos uma hora de distancia do de início'}),
+    .refine(
+      (intervals) => {
+        return intervals.every(
+          (interval) =>
+            interval.endTimeInMinutes - 60 >= interval.startTimeInMinutes
+        );
+      },
+      {
+        message:
+          "horario de termino deve ser pelo menos uma hora de distancia do de início",
+      }
+    ),
 });
 
 type TimeIntervalsFormInput = z.input<typeof TimeIntervalsFormSchema>;
@@ -120,9 +128,9 @@ export default function connectCalender() {
   });
 
   async function handleSetTimeIntervals(data: any) {
-    const formData = data as TimeIntervalsFormOutput
+    const { intervals } = data as TimeIntervalsFormOutput;
 
-    console.log(formData)
+    await api.post("/users/time-intervals", { intervals });
   }
   return (
     <Container>
@@ -175,9 +183,7 @@ export default function connectCalender() {
           })}
         </IntervalContainer>
         {errors.intervals && (
-          <FormError size='sm'>
-            {errors.intervals.message}
-          </FormError>
+          <FormError size="sm">{errors.intervals.message}</FormError>
         )}
         <Button type="submit" disabled={isSubmitting}>
           Próximo passo <ArrowRight />
