@@ -119,8 +119,10 @@ export default function connectCalender() {
     control,
   });
 
-  async function handleSetTimeIntervals(data: TimeIntervalsFormOutput) {
-    console.log(data);
+  async function handleSetTimeIntervals(data: any) {
+    const formData = data as TimeIntervalsFormOutput
+
+    console.log(formData)
   }
   return (
     <Container>
