@@ -2,6 +2,7 @@ import { Avatar, Heading, Text } from "@ignite-ui/react";
 import { Container, UserHeader } from "./style";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { prisma } from "@/lib/prisma";
+import { ScheduleForm } from "./ScheduleForm";
 
 interface ScheduleProps {
     user: {
@@ -18,13 +19,16 @@ export default function Schedule({user} : ScheduleProps) {
         <Heading>{user.name}</Heading>
         <Text>{user.bio}</Text>
       </UserHeader>
+
+      <ScheduleForm />
     </Container>
   );
 }
 
 export const getStaticPaths : GetStaticPaths = async () => {
 return {
-    paths: [],
+    paths: [], //colocando isso na hora  da build ele nao gera a página estática, somente quando tiver
+    //o parâmetro
     fallback: 'blocking'
 }
 
