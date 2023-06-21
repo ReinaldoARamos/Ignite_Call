@@ -32,6 +32,7 @@ import { Checks } from "phosphor-react";
   }
 * */
 
+
 async function handleConnectCalendars() {
   signIn("google");
 }
@@ -42,6 +43,10 @@ export default function connectCalender() {
   const hasAuthError = !!router.query.error;
 
   const isSignedIn = session.status === "authenticated";
+
+  async function handleNavigateToNextStep() {
+    await router.push('/register/time-intervals')
+  }
   return (
     <Container>
       <Header>
@@ -74,7 +79,7 @@ export default function connectCalender() {
             opções de acesso ao Google Calander
           </AuthError>
         )}
-        <Button disabled={!isSignedIn}>
+        <Button onClick={handleNavigateToNextStep} disabled={!isSignedIn}>
           Próximo passo
           <ArrowRight />
         </Button>
