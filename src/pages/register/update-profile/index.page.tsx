@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Container, Header } from "../styles";
 import {
+  Avatar,
   Button,
   Heading,
   MultiStep,
@@ -13,6 +14,9 @@ import {
 import { ArrowRight } from "phosphor-react";
 import { FormAnnotation, ProfileBox } from "./styles";
 import { useSession } from "next-auth/react";
+import { GetServerSideProps } from "next";
+import { getServerSession } from "next-auth";
+import { buildNextAuthOptions } from "@/pages/api/auth/[...nextauth].api";
 
 const UpdateProfileSchema = z.object({
   bio: z.string(),
@@ -48,6 +52,7 @@ export default function UpdateProfile() {
       <ProfileBox as="form" onSubmit={handleSubmit(handleUpdate)}>
         <label>
           <Text size="sm">Foto de Perfil</Text>
+          <Avatar src={session.data?.user.avatar_url}/>
         </label>
 
         <label>
@@ -66,3 +71,20 @@ export default function UpdateProfile() {
     </Container>
   );
 }
+
+export const getServerSideProps : GetServerSideProps = async ({req, res}) => {
+
+  const session = await getServerSession(
+    req,
+    res,
+    buildNextAuthOptions(req, res) //pega as opções de build do next auth, como scope e providers
+  );
+
+  
+  return {
+    props: {
+
+    }
+  }
+}
+
