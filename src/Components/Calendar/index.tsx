@@ -32,10 +32,10 @@ export function Calendar() {
   const currentMonth = currentDate.format("MMMM");
 
   const calendarWeeks = useMemo(() => {
-    const daysInMonthArray = Array.from({
-      length: currentDate.daysInMonth()
-    }).map((_, i) => {
-      return currentDate.set('date', i + 1)
+    const daysInMonthArray = Array.from({ //constróu um array
+      length: currentDate.daysInMonth() //pega o currentDate e o daysinmonth da api dayjs
+    }).map((_, i) => { //faz um map retornando o index, ja que ovalor de todos é undefined
+      return currentDate.set('date', i + 1)  //pega o valor e faz um set date(DIA do mes ) i(index) + 1 
     })
 
     return daysInMonthArray
