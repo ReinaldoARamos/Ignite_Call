@@ -38,8 +38,20 @@ export function Calendar() {
       return currentDate.set('date', i + 1)  //pega o valor e faz um set date(DIA do mes ) i(index) + 1 
     })
 
-    return daysInMonthArray
+    const firtsWeekDay = currentDate.get('day')
+    
+    const previousMonthFillArray = Array.from({
+      length: firtsWeekDay
+    }).map((_, i) => {
+      return currentDate.subtract(i + 1, 'day')
+    }).reverse()
+  
+    return [
+      ...previousMonthFillArray,
+      ...daysInMonthArray
+    ]
   }, [currentDate])
+
 
   console.log(calendarWeeks)
   return (
