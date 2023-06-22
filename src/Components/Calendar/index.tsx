@@ -8,7 +8,7 @@ import {
   CalendarTitle,
 } from "./style";
 import { getWeekDays } from "@/utils/get-weekdays";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 
 export function Calendar() {
@@ -30,6 +30,18 @@ export function Calendar() {
 
   const currentYear = currentDate.format("YYYY");
   const currentMonth = currentDate.format("MMMM");
+
+  const calendarWeeks = useMemo(() => {
+    const daysInMonthArray = Array.from({
+      length: currentDate.daysInMonth()
+    }).map((_, i) => {
+      return currentDate.set('date', i + 1)
+    })
+
+    return daysInMonthArray
+  }, [currentDate])
+
+  console.log(calendarWeeks)
   return (
     <CalendarContainer>
       <CalendarHeader>
