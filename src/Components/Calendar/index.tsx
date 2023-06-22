@@ -8,14 +8,23 @@ import {
   CalendarTitle,
 } from "./style";
 import { getWeekDays } from "@/utils/get-weekdays";
+import { useState } from "react";
+import dayjs from "dayjs";
 
 export function Calendar() {
+  const [currentDate, setCurrentDate] = useState(() => {
+    return dayjs().set('date', 1)
+  })
   const shortWeekDays = getWeekDays({ short: true });
+
+  
+  const currentYear = currentDate.format('YYYY')
+  const currentMonth = currentDate.format('MMMM')
   return (
     <CalendarContainer>
       <CalendarHeader>
         <CalendarTitle>
-          Dezembro <span>2022</span>
+          {currentMonth} <span>{currentYear}</span>
         </CalendarTitle>
 
         <CalendarActions>
