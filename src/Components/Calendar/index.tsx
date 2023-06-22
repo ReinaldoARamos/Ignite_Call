@@ -13,13 +13,23 @@ import dayjs from "dayjs";
 
 export function Calendar() {
   const [currentDate, setCurrentDate] = useState(() => {
-    return dayjs().set('date', 1)
-  })
+    return dayjs().set("date", 1);
+  });
   const shortWeekDays = getWeekDays({ short: true });
+  function handlePreviousMonth() {
+    const previousMonth = currentDate.subtract(1, "month");
 
-  
-  const currentYear = currentDate.format('YYYY')
-  const currentMonth = currentDate.format('MMMM')
+    setCurrentDate(previousMonth)
+  }
+
+  function handleNextMonth() {
+    const NextMonth = currentDate.add(1, "month");
+
+    setCurrentDate(NextMonth)
+  }
+
+  const currentYear = currentDate.format("YYYY");
+  const currentMonth = currentDate.format("MMMM");
   return (
     <CalendarContainer>
       <CalendarHeader>
@@ -29,11 +39,13 @@ export function Calendar() {
 
         <CalendarActions>
           <button>
-            <CaretLeft />
+            <CaretLeft onClick={handlePreviousMonth} />
+            <title>Previous Month</title>
           </button>
 
           <button>
-            <CaretRight />
+            <CaretRight  onClick={handleNextMonth} />
+            <title>Next Month</title>
           </button>
         </CalendarActions>
       </CalendarHeader>
@@ -52,9 +64,15 @@ export function Calendar() {
             <td></td>
             <td></td>
             <td></td>
-            <td><CalendarDay>1</CalendarDay></td>
-            <td><CalendarDay>2</CalendarDay></td>
-            <td><CalendarDay>3</CalendarDay></td>
+            <td>
+              <CalendarDay>1</CalendarDay>
+            </td>
+            <td>
+              <CalendarDay>2</CalendarDay>
+            </td>
+            <td>
+              <CalendarDay>3</CalendarDay>
+            </td>
           </tr>
         </tbody>
       </CalendarBody>
