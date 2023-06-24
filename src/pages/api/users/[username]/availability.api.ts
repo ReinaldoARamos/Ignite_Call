@@ -39,7 +39,25 @@ export default async function handle(
       week_day: referenceDate.get('day'),
     },
   });
+
+  if (!userAvailability) {
+
+    return res.json({ availability: [] }); //valida a adat atual para desabilitar datas anteriores
+  }
+
+  const { time_start_in_minutes, time_end_in_minutes } = userAvailability
+
+  const startHour = time_start_in_minutes / 60
+  const endHour = time_end_in_minutes / 60
+
+
+  const possibleTimes = Array.from({ length: endHour - startHour }).map(
+    (_, i) => {
+      
+      return startHour + i
+      
+    },
+  )
+
+  return res.json({ possibleTimes })
 }
-
-//
-
