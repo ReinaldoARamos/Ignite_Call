@@ -12,9 +12,9 @@ export default async function handle(
 
   const username = String(req.query.username); //pega o username da query da URL
   const { date } = req.query; //pega na query da data a data selecionada
-  const referenceDate = dayjs(String(date));
+  const referenceDate = dayjs(String(date)); //pega a data atual
 
-  const isPastDate = referenceDate.endOf("day").isBefore(new Date());
+  const isPastDate = referenceDate.endOf("day").isBefore(new Date()); //valida se a data é passada
 
   if (isPastDate) {
     return res.json({ availability: [] }); //valida a adat atual para desabilitar datas anteriores
@@ -25,12 +25,12 @@ export default async function handle(
 
   const user = await prisma.user.findUnique({
     where: {
-      username,
+      username, //pega o usuário para fazer os crossings
     },
   });
 
   if (!user) {
-    return res.status(400).json({ message: "User  not Found" });
+    return res.status(400).json({ message: "User  not Found" }); 
   }
 
   const userAvailability = await prisma.userTimeInterval.findFirst({
@@ -54,10 +54,34 @@ export default async function handle(
   const possibleTimes = Array.from({ length: endHour - startHour }).map(
     (_, i) => {
       
-      return startHour + i
+      return startHour + i //Hora de inicio mais o index
       
     },
   )
 
-  return res.json({ possibleTimes })
+  const blockedTimes  = await prisma.scheduling.findMany({
+
+    //Entra dentro do scheduling e retorna os horariois que sao maiores que start hour]
+    //e menroes que o end ghour, retornandoi assim todos os horarios entre os intervalos
+    where: {
+      user_id: user.id,
+      date: {
+        gte: referenceDate.set('hour', startHour).toDate(),
+        lte: referenceDate.set('hour', endHour).toDate()
+      }
+    }
+  })
+
+  //available times passa por dnetro do array de possible times 
+  //ex [8, 9 , 10] e valida que nao existe nenhum registro na tabela de schedule que bate
+  //p horario com a hora do agendamento
+  const AvailableTimes = possibleTimes.filter(times => {
+    return !blockedTimes.some(
+      (blockedTimes) => blockedTimes.date.getHours() === times
+
+      //entra dentro do possible times e filtra retornando todos os que nao são blocked times e que
+      //se igualao ao time que são os nossos horarios possiveis
+     )
+  })
+  return res.json({ possibleTimes,AvailableTimes })
 }
