@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../../lib/prisma";
-import dayjs from "dayjs";
+//import dayjs from "dayjs";
 
 export default async function handle(
   req: NextApiRequest,
@@ -40,5 +40,5 @@ export default async function handle(
   const blockedWeeks = [0, 1, 2, 3, 4, 5, 6].filter(weekday => {
     return !availableWeekDays.some(availableWeekDays => availableWeekDays.week_day === weekday)
   })
-  return res.json({});
+  return res.json({blockedWeeks});
 }
