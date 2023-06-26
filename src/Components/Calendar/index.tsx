@@ -82,25 +82,23 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
 
     //------------------------------------------
 
-    const nextMonthFillArray = Array.from({
+      const nextMonthFillArray = Array.from({
       length: 7 - (lastWeekDay + 1),
     }).map((_, i) => {
-      return lastDayInCurrentMonth.add(i + 1, "day");
-    });
+      return lastDayInCurrentMonth.add(i + 1, 'day')
+    })
 
     const calendarDays = [
       ...previousMonthFillArray.map((date) => {
-        return { date, disabled: true };
+        return { date, disabled: true }
       }),
-      ...nextMonthFillArray.map((date) => {
-        return { date, disabled: true };
-      }),
-      ,
       ...daysInMonthArray.map((date) => {
         return { date, disabled: date.endOf("day").isBefore(new Date()) };
       }),
-    ];
-
+      ...nextMonthFillArray.map((date) => {
+        return { date, disabled: true  }
+      }),
+    ]
     const calendarWeeks = calendarDays.reduce<CalendarWeeks>(
       (weeks, _, i, original) => {
         const isNewWeek = i % 7 === 0; //valida se a semana é uma nova caso o index seja divisível por 7
