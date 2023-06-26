@@ -36,5 +36,9 @@ export default async function handle(
         user_id: user.id
     }
   })
+
+  const blockedWeeks = [0, 1, 2, 3, 4, 5, 6].filter(weekday => {
+    return !availableWeekDays.some(availableWeekDays => availableWeekDays.week_day === weekday)
+  })
   return res.json({});
 }
