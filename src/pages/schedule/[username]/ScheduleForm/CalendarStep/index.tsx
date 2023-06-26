@@ -12,8 +12,8 @@ import { api } from "@/lib/axios";
 import { useRouter } from "next/router";
 
 interface Availability {
-  possibleTimes: number[]
-  availableTimes: number[]
+  possibleTimes: number[];
+  availableTimes: number[];
 }
 
 export function CalendarStep() {
@@ -62,7 +62,7 @@ export function CalendarStep() {
               return (
                 <TimePickerItem
                   key={hour}
-                //disabled={!availability?.AvailableTimes.includes(hour)}
+                  //disabled={!availability?.AvailableTimes.includes(hour)}
                 >
                   {String(hour).padStart(2, "0")}:00
                 </TimePickerItem>

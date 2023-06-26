@@ -66,17 +66,20 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
       currentDate.daysInMonth()
     ); //pega o último dia do mes
 
-    const firtsWeekDay = lastDayInCurrentMonth.get("day");
+   // const firtsWeekDay = lastDayInCurrentMonth.get("day");
     //------------------------------------------
 
     //------------------------------------------
+  
+    const firstWeekDay = currentDate.get('day')
     const previousMonthFillArray = Array.from({
-      length: firtsWeekDay,
+      length: firstWeekDay,
     })
       .map((_, i) => {
-        return currentDate.subtract(i + 1, "day");
+        return currentDate.subtract(i + 1, 'day')
       })
-      .reverse();
+      .reverse()
+
 
     //------------------------------------------
 
@@ -119,6 +122,7 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
   }, [currentDate]);
 
  
+
   //------------------------------------------
   return (
     <CalendarContainer>
