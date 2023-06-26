@@ -26,5 +26,15 @@ export default async function handle(
   if (!user) {
     return res.status(400).json({ message: "User  not Found" });
   }
+
+  const availableWeekDays  = await prisma.userTimeInterval.findMany({
+    select: {
+        week_day: true
+    },
+
+    where: {
+        user_id: user.id
+    }
+  })
   return res.json({});
 }
