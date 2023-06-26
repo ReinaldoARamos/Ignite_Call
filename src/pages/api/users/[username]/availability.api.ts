@@ -25,7 +25,7 @@ export default async function handle(
 
   const user = await prisma.user.findUnique({
     where: {
-      username, //pega o usuário para fazer os crossings
+      username, //pega o usuário para fazer os crossings //retorna o user
     },
   });
 
@@ -36,7 +36,9 @@ export default async function handle(
   const userAvailability = await prisma.userTimeInterval.findFirst({
     where: {
       user_id: user.id,
-      week_day: referenceDate.get('day'),
+      week_day: referenceDate.get('day'), 
+      //entra dentro to timeInterval e retorna o 
+      //que tiver cross com o id user
     },
   });
 
@@ -47,8 +49,8 @@ export default async function handle(
 
   const { time_start_in_minutes, time_end_in_minutes } = userAvailability
 
-  const startHour = time_start_in_minutes / 60
-  const endHour = time_end_in_minutes / 60
+  const startHour = time_start_in_minutes / 60 //retorna a hora de inicio
+  const endHour = time_end_in_minutes / 60 //retorna o fim em formato de hora
 
 
   const possibleTimes = Array.from({ length: endHour - startHour }).map(

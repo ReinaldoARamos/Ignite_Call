@@ -11,7 +11,7 @@ import { getWeekDays } from "@/utils/get-weekdays";
 import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 
-interface CalendarWeek {
+interface CalendarWeek { //tipagem do calendario
   week: number;
   days: Array<{
     date: dayjs.Dayjs;
@@ -23,7 +23,7 @@ interface CalendarProps {
   selectedDate?: Date | null; //tipágem de data
   onDateSelected: (date: Date) => void; //retor na um objeto de data
 }
-type CalendarWeeks = CalendarWeek[];
+type CalendarWeeks = CalendarWeek[]; //calendar weeks array de calendar week
 
 export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(() => {
@@ -103,12 +103,12 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
 
     const calendarWeeks = calendarDays.reduce<CalendarWeeks>(
       (weeks, _, i, original) => {
-        const isNewWeek = i % 7 === 0;
+        const isNewWeek = i % 7 === 0; //valida se a semana é uma nova caso o index seja divisível por 7
 
         if (isNewWeek) {
           weeks.push({
             week: i / 7 + 1,
-            days: original.slice(i, i + 7),
+            days: original.slice(i, i + 7), //faz um push no array, separando o index e o index + 7
           });
         }
 
