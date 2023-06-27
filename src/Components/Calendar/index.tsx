@@ -73,6 +73,10 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
   );
   //-----------------------------------------------------------------
   const calendarWeeks = useMemo(() => {
+
+    if(!blockedWeeks) {
+      return []
+    }
     const daysInMonthArray = Array.from({
       //constróu um array
       length: currentDate.daysInMonth(), //pega o currentDate e o daysinmonth da api dayjs
@@ -123,7 +127,8 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
       }),
       ...daysInMonthArray.map((date) => {
         return { date, disabled: date.endOf("day").isBefore(new Date())
-        || blockedWeeks?.blockedWeekDays.includes(date.get('day'))
+        || blockedWeeks?.blockedWeekDays?.includes(date.get('day'))
+
       };
       }),
       ...nextMonthFillArray.map((date) => {
@@ -145,6 +150,7 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
       },
       []
     );
+         
 
     return calendarWeeks;
   }, [currentDate, blockedWeeks]);
