@@ -40,5 +40,13 @@ export default async function handle(
   const blockedWeeks = [0, 1, 2, 3, 4, 5, 6].filter(weekday => {
     return !availableWeekDays.some(availableWeekDays => availableWeekDays.week_day === weekday)
   })
-  return res.json({blockedWeeks});
+
+  const blockedDatesRaw = await prisma.$queryRaw`
+    SELECT * 
+    FROM schedulings S
+
+    WHERE S.user_id = ${user.id}
+    AND DATE_FORMAT(S.date, "%Y-%m") = ${`${year} - ${month}`}
+  `
+  return res.json({blockedWeeks, blockedDatesRaw});
 }
