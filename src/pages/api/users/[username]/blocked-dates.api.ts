@@ -22,56 +22,44 @@ export default async function handle(
       username, //pega o usuário para fazer os crossings //retorna o user
     },
   });
- 
+
   if (!user) {
     return res.status(400).json({ message: "User  not Found" });
   }
 
-  const availableWeekDays  = await prisma.userTimeInterval.findMany({
+  const availableWeekDays = await prisma.userTimeInterval.findMany({
     select: {
-        week_day: true
+      week_day: true,
     },
 
     where: {
-        user_id: user.id
-    }
-  })
-  const blockedWeekDays = [0, 1, 2, 3, 4, 5, 6].filter(weekday => {
-    return !availableWeekDays.some(availableWeekDays => availableWeekDays.week_day === weekday)
-  })
-  
+      user_id: user.id,
+    },
+  });
+  const blockedWeekDays = [0, 1, 2, 3, 4, 5, 6].filter((weekday) => {
+    return !availableWeekDays.some(
+      (availableWeekDays) => availableWeekDays.week_day === weekday
+    );
+  });
 
-
-  //console.log("data: " + yearMonth)
-  const yearMonth = `${year}-${String(month).padStart(2, '0')}`
-  console.log(yearMonth)
-
-  const blockedDatesRaw = await prisma.$queryRaw`
-  SELECT  *
-  FROM     schedulings S
-                                                        
-  WHERE  S.user_id = ${user.id} AND DATE_FORMAT(S.date, "%Y-%m") = ${`${yearMonth}`}
-  `
-
-  /*
+  const yearMonth = `${year}-${String(month).padStart(2, "0")}`;
   
   const blockedDatesRaw: Array<{ date: number }> = await prisma.$queryRaw`
-    SELECT
-      EXTRACT(DAY FROM S.DATE) AS date,
-      COUNT(S.date) AS amount,
-      ((UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60) AS size
-    FROM schedulings S
-    LEFT JOIN user_time_intervals UTI
-      ON UTI.week_day = WEEKDAY(DATE_ADD(S.date, INTERVAL 1 DAY))
-    WHERE S.user_id = ${user.id}
-      AND DATE_FORMAT(S.date, "%Y-%m") = ${`${year}-${month}`}
-    GROUP BY EXTRACT(DAY FROM S.DATE),
-      ((UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60)
-    HAVING amount >= size
-  `
+  SELECT
+    EXTRACT(DAY FROM S.DATE) AS date,
+    COUNT(S.date) AS amount,
+    ((UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60) AS size
+  FROM schedulings S
+  LEFT JOIN user_time_intervals UTI
+    ON UTI.week_day = WEEKDAY(DATE_ADD(S.date, INTERVAL 1 DAY))
+  WHERE S.user_id = ${user.id}
+    AND DATE_FORMAT(S.date, "%Y-%m") = ${`${yearMonth}`}
+  GROUP BY EXTRACT(DAY FROM S.DATE),
+    ((UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60)
+  HAVING amount >= size
+`
 
-  const blockedDates = blockedDatesRaw.map((item) => item.date)
-   console.log(year, month)
-  * */
-  return res.json({blockedWeekDays, blockedDatesRaw});
+const blockedDates = blockedDatesRaw.map((item) => item.date)
+
+return res.json({ blockedWeekDays, blockedDates })
 }
