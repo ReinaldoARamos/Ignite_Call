@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 
 interface BlockedDates{
   blockedWeekDays: number[]
+  blockedDates: number[]
 }
 
 interface CalendarWeek { //tipagem do calendario
@@ -64,7 +65,7 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
       const response = await api.get(`users/${username}/blocked-dates`, {
         params: {
             year: currentDate.get('year'),
-            month: currentDate.get('month')
+            month: currentDate.get('month') + 1 //pra ele pegar a data correta pois janeiro é 0
         },
       });
 
@@ -128,6 +129,7 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
       ...daysInMonthArray.map((date) => {
         return { date, disabled: date.endOf("day").isBefore(new Date())
         || blockedWeeks?.blockedWeekDays?.includes(date.get('day'))
+        || blockedWeeks?.blockedDates?.includes(date.get('date'))
 
       };
       }),
