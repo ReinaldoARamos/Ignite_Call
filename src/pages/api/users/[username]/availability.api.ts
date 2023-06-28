@@ -73,12 +73,14 @@ export default async function handle(
   //ex [8, 9 , 10] e valida que nao existe nenhum registro na tabela de schedule que bate
   //p horario com a hora do agendamento
   const AvailableTimes = possibleTimes.filter((times) => {
-    return !blockedTimes.some(
+    const isTimeBlocked = blockedTimes.some(
       (blockedTimes) => blockedTimes.date.getHours() === times
 
       //entra dentro do possible times e filtra retornando todos os que nao são blocked times e que
       //se igualao ao time que são os nossos horarios possiveis
     );
+
+    const isTimeinPast = referenceDate.set('hour', times).isBefore(new Date())
   });
   return res.json({ possibleTimes, AvailableTimes });
 }
