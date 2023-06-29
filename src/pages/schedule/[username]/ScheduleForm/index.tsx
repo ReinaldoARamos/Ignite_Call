@@ -6,8 +6,8 @@ export function ScheduleForm() {
   const [selectedDateTime, setSelectedDateTime] = useState<Date | null>();
 
   if (selectedDateTime) {
-    return <ConfirmStep />; //abre o forumário caso uma data seja selecionada
-    
+    return <ConfirmStep schedulingDate={selectedDateTime} />; //abre o forumário caso uma data seja selecionada
+
   }
 
   return <CalendarStep onSelectDateTime={setSelectedDateTime} />; //seta o objeto no estado

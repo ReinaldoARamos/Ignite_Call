@@ -5,6 +5,7 @@ import { Clock } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import dayjs from "dayjs";
 
 const confirmFormSchema = z.object({
   name: z.string().min(3, {message: 'Nome tem que ter no mínimo 3 caractéres'}),
@@ -12,9 +13,14 @@ const confirmFormSchema = z.object({
   observations: z.string().nullable(),
 });
 
+
+interface ConfirmStepProps {
+  schedulingDate: Date
+}
+
 type ConfirmFormData = z.infer<typeof confirmFormSchema>;
 
-export function ConfirmStep() {
+export function ConfirmStep({schedulingDate} : ConfirmStepProps) {
   const {
     register,
     handleSubmit,
@@ -26,17 +32,20 @@ export function ConfirmStep() {
   function handleConfirmScheduling(data: ConfirmFormData) {
     console.log(data);
   }
+
+  const describeDate = dayjs(schedulingDate).format('DD [de] MMMM [ de ] YYYY')
+  const describeTime = dayjs(schedulingDate).format('HH:mm[h]')
   return (
     <ConfirmForm as={"form"} onSubmit={handleSubmit(handleConfirmScheduling)}>
       <FormHeader>
         <Text>
           <CalendarBlank />
-          22 de Setembro
+         {describeDate}
         </Text>
 
         <Text>
           <Clock />
-          18:00h
+         {describeTime}
         </Text>
       </FormHeader>
       <label>
