@@ -16,11 +16,12 @@ const confirmFormSchema = z.object({
 
 interface ConfirmStepProps {
   schedulingDate: Date
+  onCancelConfirmation: () => void
 }
 
 type ConfirmFormData = z.infer<typeof confirmFormSchema>;
 
-export function ConfirmStep({schedulingDate} : ConfirmStepProps) {
+export function ConfirmStep({schedulingDate, onCancelConfirmation} : ConfirmStepProps) {
   const {
     register,
     handleSubmit,
@@ -65,7 +66,7 @@ export function ConfirmStep({schedulingDate} : ConfirmStepProps) {
 
       </label>
       <FormActions>
-        <Button type="button" variant={"tertiary"}>
+        <Button type="button" variant={"tertiary"} onClick={onCancelConfirmation}>
           Cancelar
         </Button>
         <Button type="submit">Confirmar</Button>
