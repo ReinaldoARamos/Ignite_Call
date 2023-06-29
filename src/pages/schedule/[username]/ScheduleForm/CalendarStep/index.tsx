@@ -17,7 +17,11 @@ interface Availability {
   AvailableTimes: number[];
 }
 
-export function CalendarStep() {
+interface CalendarStepProps {
+  onSelectDateTime: (date: Date) => void;
+}
+
+export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   // const [availability, setAvailability] = useState<Availability | null>(null);
   const isDateSelected = !!selectedDate; //condicional, mostra o time picker quando a data é selecionada
@@ -52,6 +56,14 @@ export function CalendarStep() {
   );
   //-----------------------------------------------------------------
 
+  function handleSelectTime(hour: number) {
+    const dateWithTime = dayjs(selectedDate)
+      .set("hour", hour)
+      .startOf("hour")
+      .toDate();
+
+    onSelectDateTime(dateWithTime);
+  }
   return (
     <Container isTimePickerOpen={isDateSelected}>
       <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
@@ -68,6 +80,7 @@ export function CalendarStep() {
                 <TimePickerItem
                   key={hour}
                   disabled={!availability?.AvailableTimes.includes(hour)}
+                  onClick={() => handleSelectTime(hour)}
                 >
                   {String(hour).padStart(2, "0")}:00
                 </TimePickerItem>

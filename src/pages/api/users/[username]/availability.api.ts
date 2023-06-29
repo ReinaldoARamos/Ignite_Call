@@ -80,7 +80,9 @@ export default async function handle(
       //se igualao ao time que são os nossos horarios possiveis
     );
 
-    const isTimeinPast = referenceDate.set('hour', times).isBefore(new Date())
+    const isTimeinPast = referenceDate.set('hour', times).isBefore(new Date()) //valida se a hora percorrida esta no passado
+
+    return !isTimeBlocked && !isTimeinPast
   });
   return res.json({ possibleTimes, AvailableTimes });
 }
