@@ -6,22 +6,28 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
+import { api } from "@/lib/axios";
+import { useRouter } from "next/router";
 
 const confirmFormSchema = z.object({
-  name: z.string().min(3, {message: 'Nome tem que ter no mínimo 3 caractéres'}),
-  email: z.string().email({message: 'Digite um e-mail válido'}),
-  observations: z.string().nullable(),
+  name: z
+    .string()
+    .min(3, { message: "Nome tem que ter no mínimo 3 caractéres" }),
+  email: z.string().email({ message: "Digite um e-mail válido" }),
+  observation: z.string().nullable(),
 });
 
-
 interface ConfirmStepProps {
-  schedulingDate: Date
-  onCancelConfirmation: () => void
+  schedulingDate: Date;
+  onCancelConfirmation: () => void;
 }
 
 type ConfirmFormData = z.infer<typeof confirmFormSchema>;
 
-export function ConfirmStep({schedulingDate, onCancelConfirmation} : ConfirmStepProps) {
+export function ConfirmStep({
+  schedulingDate,
+  onCancelConfirmation,
+}: ConfirmStepProps) {
   const {
     register,
     handleSubmit,
@@ -30,23 +36,36 @@ export function ConfirmStep({schedulingDate, onCancelConfirmation} : ConfirmStep
     resolver: zodResolver(confirmFormSchema),
   });
 
-  function handleConfirmScheduling(data: ConfirmFormData) {
-    console.log(data);
+  const router = useRouter()
+
+  const username = String(router.query.username)
+
+  async function handleConfirmScheduling(data: ConfirmFormData) {
+
+    const {name, email, observation} = data
+    await api.post(`users/${username}/schedule`, {
+        name,
+        observation,
+        email,
+        date: schedulingDate
+    })
+
+    await router.push(`/${username}`)
   }
 
-  const describeDate = dayjs(schedulingDate).format('DD [de] MMMM [ de ] YYYY')
-  const describeTime = dayjs(schedulingDate).format('HH:mm[h]')
+  const describeDate = dayjs(schedulingDate).format("DD [de] MMMM [ de ] YYYY");
+  const describeTime = dayjs(schedulingDate).format("HH:mm[h]");
   return (
     <ConfirmForm as={"form"} onSubmit={handleSubmit(handleConfirmScheduling)}>
       <FormHeader>
         <Text>
           <CalendarBlank />
-         {describeDate}
+          {describeDate}
         </Text>
 
         <Text>
           <Clock />
-         {describeTime}
+          {describeTime}
         </Text>
       </FormHeader>
       <label>
@@ -62,11 +81,14 @@ export function ConfirmStep({schedulingDate, onCancelConfirmation} : ConfirmStep
 
       <label>
         <Text size="sm">Endereço de E-mail </Text>
-        <TextArea {...register("observations")} />
-
+        <TextArea {...register("observation")} />
       </label>
       <FormActions>
-        <Button type="button" variant={"tertiary"} onClick={onCancelConfirmation}>
+        <Button
+          type="button"
+          variant={"tertiary"}
+          onClick={onCancelConfirmation}
+        >
           Cancelar
         </Button>
         <Button type="submit">Confirmar</Button>

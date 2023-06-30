@@ -64,5 +64,5 @@ export default async function handle(
       user_id: user.id
     }
   })
-  return res.json({});
+  return res.status(201).end();
 }
