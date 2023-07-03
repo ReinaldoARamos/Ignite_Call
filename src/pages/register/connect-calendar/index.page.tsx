@@ -12,6 +12,7 @@ import {
 } from "./styles";
 import { useRouter } from "next/router";
 import { Checks } from "phosphor-react";
+import { NextSeo } from "next-seo";
 /*
 
 
@@ -32,7 +33,6 @@ import { Checks } from "phosphor-react";
   }
 * */
 
-
 async function handleConnectCalendars() {
   signIn("google");
 }
@@ -45,10 +45,16 @@ export default function connectCalender() {
   const isSignedIn = session.status === "authenticated";
 
   async function handleNavigateToNextStep() {
-    await router.push('/register/time-intervals')
+    await router.push("/register/time-intervals");
   }
   return (
-    <Container>
+    <>
+      <NextSeo
+        title="Conecte com a sua agenda"
+        description="availabiluty set"
+        noindex
+      />
+        <Container>
       <Header>
         <Heading as="strong" />
         <Text>Conecte sua agenda</Text>
@@ -85,5 +91,6 @@ export default function connectCalender() {
         </Button>
       </ConnectBox>
     </Container>
+    </>
   );
 }
