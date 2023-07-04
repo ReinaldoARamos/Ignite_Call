@@ -123,7 +123,7 @@ export default function connectCalender() {
 
   const router = useRouter()
   const intervals = watch("intervals"); //retorna em tempo real alteração de valores
-  const weekDays = getWeekDays();
+  const weekDays = getWeekDays({ short: false });
 
   const { fields } = useFieldArray({
     name: "intervals",
